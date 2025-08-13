@@ -2,6 +2,7 @@ package app
 
 import (
 	"apiGo/internal/onlineSub/transport"
+
 	"context"
 	"log/slog"
 	"net/http"
@@ -14,7 +15,7 @@ func StartMain(ctx context.Context) error {
 
 	slog.Info("Сервер запущен")
 
-	mux:= transport.AllHandles(ctx)
+	mux := transport.AllHandles(ctx)
 
 	s := http.Server{
 		Addr:    ":8080",

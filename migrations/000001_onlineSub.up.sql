@@ -1,5 +1,4 @@
 CREATE TABLE IF NOT EXISTS Subscription (
-    id SERIAL PRIMARY KEY,
     service_name VARCHAR(255) NOT NULL,
     price INTEGER NOT NULL DEFAULT 0,
     user_id VARCHAR(255) NOT NULL,

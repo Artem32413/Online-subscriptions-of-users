@@ -14,3 +14,7 @@ func ConvertTime(str string) time.Time {
 
 	return date
 }
+
+func ConvertString(t time.Time) string {
+	return t.Format("2006-01-02 15:04:05")
+}

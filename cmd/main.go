@@ -22,7 +22,7 @@ import (
 	"os/signal"
 
 	"apiGo/cmd/app"
-	_ "apiGo/docs"
+	// _ "apiGo/docs"
 )
 
 // @Summary		Запуск приложения

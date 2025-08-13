@@ -14,7 +14,7 @@ type PostgreSQL struct {
 
 func ConstructorDB(ctx context.Context) (*PostgreSQL, error) {
 	url := os.Getenv("DATABASE_URL")
-	fmt.Println(url)
+
 	db, err := pgx.Connect(ctx, url)
 
 	if err != nil {

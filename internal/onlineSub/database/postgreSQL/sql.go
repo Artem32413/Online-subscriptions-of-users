@@ -4,6 +4,7 @@ import (
 	"apiGo/internal/onlineSub/config/databaseConfig"
 	"apiGo/internal/onlineSub/database/postgreSQL/convert"
 	"apiGo/internal/onlineSub/model/structs"
+	"time"
 
 	"context"
 	"fmt"
@@ -64,16 +65,20 @@ func (s *DBService) ConclusionARecordSQL(ctx context.Context, str structs.Subscr
 func (s *DBService) AllSubscriptionsSQL(ctx context.Context) ([]structs.Subscription, error) {
 	var a []structs.Subscription
 
-	r, err := s.db.Query(ctx, addition)
+	r, err := s.db.Query(ctx, getAll)
 	if err != nil {
 		return nil, fmt.Errorf("Ошибка в добавлении подписки: %v", err)
 	}
 
 	for r.Next() {
 		var all structs.Subscription
-		if err := r.Scan(&all); err != nil {
+		var t time.Time
+		if err := r.Scan(&all.Service_name, &all.Price, &all.User_id, &t); err != nil {
 			return nil, fmt.Errorf("Ошибка в сканировании: %v", err)
 		}
+		
+		all.Start_date = convert.ConvertString(t)
+
 		a = append(a, all)
 	}
 
