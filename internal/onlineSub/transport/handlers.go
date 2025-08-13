@@ -6,6 +6,7 @@ import (
 	"apiGo/internal/onlineSub/database/postgreSQL"
 	"apiGo/internal/onlineSub/model/interfaces"
 	"apiGo/internal/onlineSub/service"
+	swaggerpkg "apiGo/internal/onlineSub/transport/swaggerPkg"
 
 	"context"
 	"log/slog"
@@ -15,37 +16,6 @@ import (
 type InventoryService struct {
 	interfaces.HandlersOnlineSub
 	*databaseConfig.PostgreSQL
-}
-
-func AddSwaggerRoutes(mux *http.ServeMux) {
-	// Страница с Swagger UI (используем CDN)
-	mux.HandleFunc("/docs/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html")
-		w.Write([]byte(`
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Swagger UI</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui.css" />
-</head>
-<body>
-<div id="swagger-ui"></div>
-<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui-bundle.js"></script>
-<script>
-  const ui = SwaggerUIBundle({
-    url: "/docs/swagger.json",
-    dom_id: '#swagger-ui',
-  });
-</script>
-</body>
-</html>`))
-	})
-
-	// Отдача файла swagger.json
-	mux.HandleFunc("/docs/swagger.json", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./docs/swagger.json")
-	})
 }
 
 func AllHandles(ctx context.Context) *http.ServeMux {
@@ -61,7 +31,7 @@ func AllHandles(ctx context.Context) *http.ServeMux {
 
 	mux := http.NewServeMux()
 
-	AddSwaggerRoutes(mux)
+	swaggerpkg.AddSwaggerRoutes(mux)
 
 	mux.HandleFunc("/add/", handlers.AddingARecord)
 	mux.HandleFunc("/sum/", handlers.ConclusionARecord)
