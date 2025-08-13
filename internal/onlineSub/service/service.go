@@ -28,3 +28,7 @@ func (o *OnlineSubService) AmountOfSubscriptionsLogic(ctx context.Context, str s
 func (o *OnlineSubService) AllSubscriptionsLogic(ctx context.Context) ([]structs.Subscription, error) {
 	return o.repo.AllSubscriptionsSQL(ctx)
 }
+
+func (o *OnlineSubService) UpdateSubscriptionRecordLogic(ctx context.Context, a structs.Subscription) error {
+	return o.repo.UpdateSubscriptionRecordSQL(ctx, a)
+}

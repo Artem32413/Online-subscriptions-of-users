@@ -16,6 +16,11 @@ var (
 	addition   = `INSERT INTO Subscription (service_name, price, user_id, start_date) VALUES ($1, $2, $3, $4)`
 	filtration = `SELECT COALESCE(SUM(price), 0) FROM Subscription WHERE start_date >= $1 AND start_date <= $2 AND user_id = $3 AND service_name = $4`
 	getAll     = `SELECT * FROM Subscription`
+	updateSub  = `UPDATE Subscription
+	SET price = $1
+	WHERE service_name = $2
+	  AND user_id = $3
+	  AND start_date = $4`
 )
 
 type DBService struct {
@@ -27,7 +32,10 @@ func New(db *databaseConfig.PostgreSQL) *DBService {
 }
 
 func (s *DBService) AddARecordSQL(ctx context.Context, str structs.Subscription) error {
-	date := convert.ConvertTime(str.Start_date)
+	date, err := convert.ConvertTime(str.Start_date)
+	if err != nil {
+		return err
+	}
 
 	if _, err := s.db.Exec(ctx, addition, str.Service_name, str.Price, str.User_id, date); err != nil {
 		return fmt.Errorf("Ошибка в добавлении подписки: %v", err)
@@ -37,9 +45,15 @@ func (s *DBService) AddARecordSQL(ctx context.Context, str structs.Subscription)
 }
 
 func (s *DBService) ConclusionARecordSQL(ctx context.Context, str structs.Subscription) (*int, error) {
-	start_date := convert.ConvertTime(str.Start_date)
-
-	end_date := convert.ConvertTime(str.End_date)
+	start_date, err := convert.ConvertTime(str.Start_date)
+	if err != nil {
+		return nil, err
+	}
+	
+	end_date, err := convert.ConvertTime(str.End_date)
+	if err != nil {
+		return nil, err
+	}
 
 	r, err := s.db.Query(ctx, filtration, start_date, end_date, str.User_id, str.Service_name)
 	if err != nil {
@@ -76,11 +90,23 @@ func (s *DBService) AllSubscriptionsSQL(ctx context.Context) ([]structs.Subscrip
 		if err := r.Scan(&all.Service_name, &all.Price, &all.User_id, &t); err != nil {
 			return nil, fmt.Errorf("Ошибка в сканировании: %v", err)
 		}
-		
+
 		all.Start_date = convert.ConvertString(t)
 
 		a = append(a, all)
 	}
 
 	return a, nil
+}
+
+func (s *DBService) UpdateSubscriptionRecordSQL(ctx context.Context, str structs.Subscription) error {
+	start_date, err := convert.ConvertTime(str.Start_date)
+	if err != nil {
+		return err
+	}
+	if _, err := s.db.Exec(ctx, updateSub, str.Price, str.Service_name, str.User_id, start_date); err != nil {
+		return fmt.Errorf("Ошибка в обновлении подписки: %v", err)
+	}
+
+	return nil
 }
