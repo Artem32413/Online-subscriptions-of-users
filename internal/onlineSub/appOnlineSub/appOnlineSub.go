@@ -23,6 +23,16 @@ func New(svc *service.OnlineSubService) *OnlineSubHandler {
 	}
 }
 
+// AddingARecord apiGo
+// @Summary Добавление новой подписки
+// @Description Добавляет запись о новой подписке пользователя
+// @Tags Subscriptions
+// @Accept json
+// @Produce plain
+// @Param subscription body structs.Subscription2 true "Данные подписки"
+// @Success 200 {string} string "Успешное добавление записи"
+// @Failure 400 {string} string "Ошибка в зависимости от контекста"
+// @Router /add/ [post]
 func (s *OnlineSubHandler) AddingARecord(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		errors.HandleError(w, fmt.Errorf("Неверный метод"), http.StatusBadRequest)
@@ -46,6 +56,16 @@ func (s *OnlineSubHandler) AddingARecord(w http.ResponseWriter, r *http.Request)
 	header.HeaderWithText(w, []byte("Успешное добавление записи"))
 }
 
+// ConclusionARecord apiGo
+// @Summary Получение информации о подписках
+// @Description Возвращает информацию о подписках пользователя
+// @Tags Subscriptions
+// @Accept json
+// @Produce json
+// @Param subscription body structs.Subscription true "Данные для поиска подписок"
+// @Success 200 {array} structs.Subscription
+// @Failure 400 {string} string "Ошибка в зависимости от контекста"
+// @Router /sum/ [post]
 func (s *OnlineSubHandler) ConclusionARecord(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		errors.HandleError(w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
@@ -77,6 +97,14 @@ func (s *OnlineSubHandler) ConclusionARecord(w http.ResponseWriter, r *http.Requ
 	header.HeaderWithSub(w, req)
 }
 
+// AllSubscriptions apiGo
+// @Summary Получение всех подписок
+// @Description Возвращает список всех подписок в системе
+// @Tags Subscriptions
+// @Produce json
+// @Success 200 {array} structs.Subscription2
+// @Failure 400 {string} string "Ошибка в зависимости от контекста"
+// @Router /all/ [get]
 func (s *OnlineSubHandler) AllSubscriptions(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		errors.HandleError(w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
@@ -101,6 +129,16 @@ func (s *OnlineSubHandler) AllSubscriptions(w http.ResponseWriter, r *http.Reque
 	header.HeaderWithSub(w, req)
 }
 
+// UpdateSubscriptionRecord apiGo
+// @Summary Обновление подписки
+// @Description Обновляет информацию о существующей подписке
+// @Tags Subscriptions
+// @Accept json
+// @Produce plain
+// @Param subscription body structs.Subscription2 true "Обновленные данные подписки"
+// @Success 200 {string} string "Успешная перезапись подписки"
+// @Failure 400 {string} string "Ошибка в зависимости от контекста"
+// @Router /update/ [put]
 func (s *OnlineSubHandler) UpdateSubscriptionRecord(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		errors.HandleError(w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
@@ -125,6 +163,16 @@ func (s *OnlineSubHandler) UpdateSubscriptionRecord(w http.ResponseWriter, r *ht
 	header.HeaderWithText(w, []byte("Успешная перезапись подписки"))
 }
 
+// DeleteSubscriptionRecord apiGo
+// @Summary Удаление подписки
+// @Description Удаляет информацию о подписке
+// @Tags Subscriptions
+// @Accept json
+// @Produce plain
+// @Param subscription body structs.Subscription2 true "Данные подписки для удаления"
+// @Success 200 {string} string "Успешное удаление подписки"
+// @Failure 400 {string} string "Ошибка в зависимости от контекста"
+// @Router /delete/ [delete]
 func (s *OnlineSubHandler) DeleteSubscriptionRecord(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		errors.HandleError(w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)

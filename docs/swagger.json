@@ -1,0 +1,273 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Тестовое задание Junior Golang Developer Effective Mobile",
+        "title": "API Go Service",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.example.com/support",
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/add/": {
+            "post": {
+                "description": "Добавляет запись о новой подписке пользователя",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Добавление новой подписки",
+                "parameters": [
+                    {
+                        "description": "Данные подписки",
+                        "name": "subscription",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/structs.Subscription2"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное добавление записи",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в зависимости от контекста",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/all/": {
+            "get": {
+                "description": "Возвращает список всех подписок в системе",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Получение всех подписок",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/structs.Subscription2"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в зависимости от контекста",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/delete/": {
+            "delete": {
+                "description": "Удаляет информацию о подписке",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Удаление подписки",
+                "parameters": [
+                    {
+                        "description": "Данные подписки для удаления",
+                        "name": "subscription",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/structs.Subscription2"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное удаление подписки",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в зависимости от контекста",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sum/": {
+            "post": {
+                "description": "Возвращает информацию о подписках пользователя",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Получение информации о подписках",
+                "parameters": [
+                    {
+                        "description": "Данные для поиска подписок",
+                        "name": "subscription",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/structs.Subscription"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/structs.Subscription"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в зависимости от контекста",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/update/": {
+            "put": {
+                "description": "Обновляет информацию о существующей подписке",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Обновление подписки",
+                "parameters": [
+                    {
+                        "description": "Обновленные данные подписки",
+                        "name": "subscription",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/structs.Subscription2"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная перезапись подписки",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в зависимости от контекста",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "structs.Subscription": {
+            "type": "object",
+            "properties": {
+                "end_date": {
+                    "description": "Опционально дата окончания подписки",
+                    "type": "string",
+                    "example": "03-2026"
+                },
+                "price": {
+                    "description": "Стоимость месячной подписки в рублях",
+                    "type": "integer",
+                    "example": 400
+                },
+                "service_name": {
+                    "description": "Название сервиса, предоставляющего подписку",
+                    "type": "string",
+                    "example": "Yandex Plus"
+                },
+                "start_date": {
+                    "description": "Дата начала подписки (месяц и год)",
+                    "type": "string",
+                    "example": "07-2025"
+                },
+                "user_id": {
+                    "description": "ID пользователя",
+                    "type": "string",
+                    "example": "60601fee-2bf1-4721-ae6f-7636e79a0cba"
+                }
+            }
+        },
+        "structs.Subscription2": {
+            "type": "object",
+            "properties": {
+                "price": {
+                    "description": "Стоимость месячной подписки в рублях",
+                    "type": "integer",
+                    "example": 400
+                },
+                "service_name": {
+                    "description": "Название сервиса, предоставляющего подписку",
+                    "type": "string",
+                    "example": "Yandex Plus"
+                },
+                "start_date": {
+                    "description": "Дата начала подписки (месяц и год)",
+                    "type": "string",
+                    "example": "07-2025"
+                },
+                "user_id": {
+                    "description": "ID пользователя",
+                    "type": "string",
+                    "example": "60601fee-2bf1-4721-ae6f-7636e79a0cba"
+                }
+            }
+        }
+    }
+}

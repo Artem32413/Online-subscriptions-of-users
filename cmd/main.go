@@ -1,6 +1,6 @@
 //	@title			API Go Service
 //	@version		1.0
-//	@description	This is a sample API Go server with Zap logging
+//	@description	Тестовое задание Junior Golang Developer Effective Mobile
 
 //	@contact.name	API Support
 //	@contact.url	http://www.example.com/support
@@ -22,7 +22,7 @@ import (
 	"os/signal"
 
 	"apiGo/cmd/app"
-	// _ "apiGo/docs"
+	_ "apiGo/docs"
 )
 
 // @Summary		Запуск приложения
