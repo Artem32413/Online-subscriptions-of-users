@@ -11,9 +11,9 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func StartMain(ctx context.Context) error {
+func StartMain(ctx context.Context, log *slog.Logger) error {
 
-	slog.Info("Сервер запущен")
+	log.Info("Сервер запущен")
 
 	mux := transport.AllHandles(ctx)
 
@@ -24,7 +24,7 @@ func StartMain(ctx context.Context) error {
 
 	go func() {
 		<-ctx.Done()
-		slog.Info("Сервер завершен")
+		log.Info("Сервер завершен")
 		s.Shutdown(ctx)
 	}()
 

@@ -23,13 +23,15 @@ import (
 
 	"apiGo/cmd/app"
 	_ "apiGo/docs"
+	"apiGo/pkg/logger"
 )
 
 // @Summary		Запуск приложения
 // @Description	Основная точка входа для API сервиса
 func main() {
-	if err := realMain(); err != nil {
-		slog.Error(err.Error())
+	log := logger.InitSwagLog()
+	if err := realMain(log); err != nil {
+		log.Error(err.Error())
 		return
 	}
 }
@@ -38,9 +40,9 @@ func main() {
 //
 //	@Summary		Основная логика приложения
 //	@Description	Инициализирует контекст и запускает API сервер
-func realMain() error {
+func realMain(log *slog.Logger) error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
-	return app.StartMain(ctx)
+	return app.StartMain(ctx, log)
 }
