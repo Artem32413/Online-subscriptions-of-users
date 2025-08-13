@@ -15,7 +15,7 @@ func StartMain(ctx context.Context, log *slog.Logger) error {
 
 	log.Info("Сервер запущен")
 
-	mux := transport.AllHandles(ctx)
+	mux := transport.AllHandles(ctx, log)
 
 	s := http.Server{
 		Addr:    ":8080",

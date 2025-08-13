@@ -7,7 +7,6 @@ import (
 	"apiGo/internal/onlineSub/model/interfaces"
 	"apiGo/internal/onlineSub/service"
 	swaggerpkg "apiGo/internal/onlineSub/transport/swaggerPkg"
-	"apiGo/pkg/logger"
 
 	"context"
 	"log/slog"
@@ -19,15 +18,14 @@ type InventoryService struct {
 	*databaseConfig.PostgreSQL
 }
 
-func AllHandles(ctx context.Context) *http.ServeMux {
+func AllHandles(ctx context.Context, log *slog.Logger) *http.ServeMux {
 	db, err := databaseConfig.ConstructorDB(ctx)
 	if err != nil {
-		slog.Error(err.Error())
+		log.Error(err.Error())
 		return nil
 	}
 
 	repo := postgreSQL.New(db)
-	log := logger.InitSwagLog()
 	svc := service.New(repo)
 	handlers := appOnlineSub.New(svc, log)
 
