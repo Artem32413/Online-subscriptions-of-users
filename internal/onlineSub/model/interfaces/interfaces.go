@@ -1,13 +1,15 @@
 package interfaces
 
 import (
-	"net/http"
+	"apiGo/internal/onlineSub/model/structs"
+
+	"context"
 )
 
 type HandlersOnlineSub interface {
-	AddARecord(w http.ResponseWriter, r *http.Request)
-	ConclusionARecord(w http.ResponseWriter, r *http.Request)
-	AllSubscriptions(w http.ResponseWriter, r *http.Request)
-	UpdateSubscriptionRecord(w http.ResponseWriter, r *http.Request)
-	DeleteSubscriptionRecord(w http.ResponseWriter, r *http.Request)
+	AddSubscriptionLogic(ctx context.Context, str structs.Subscription) error
+	AmountOfSubscriptionsLogic(ctx context.Context, str structs.Subscription) (structs.Sum, error)
+	AllSubscriptionsLogic(ctx context.Context) ([]structs.Subscription, error) 
+	UpdateSubscriptionRecordLogic(ctx context.Context, a structs.Subscription) error
+	DeleteSubscriptionRecordLogic(ctx context.Context, a structs.Subscription) error 
 }

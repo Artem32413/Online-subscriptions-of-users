@@ -4,7 +4,6 @@ import (
 	"apiGo/internal/onlineSub/appOnlineSub"
 	"apiGo/internal/onlineSub/config/databaseConfig"
 	"apiGo/internal/onlineSub/database/postgreSQL"
-	"apiGo/internal/onlineSub/model/interfaces"
 	"apiGo/internal/onlineSub/service"
 	swaggerpkg "apiGo/internal/onlineSub/transport/swaggerPkg"
 
@@ -12,11 +11,6 @@ import (
 	"log/slog"
 	"net/http"
 )
-
-type InventoryService struct {
-	interfaces.HandlersOnlineSub
-	*databaseConfig.PostgreSQL
-}
 
 func AllHandles(ctx context.Context, log *slog.Logger) *http.ServeMux {
 	db, err := databaseConfig.ConstructorDB(ctx)
