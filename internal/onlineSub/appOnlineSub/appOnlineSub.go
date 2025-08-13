@@ -4,6 +4,7 @@ import (
 	"apiGo/internal/onlineSub/model/structs"
 	"apiGo/internal/onlineSub/service"
 	"apiGo/pkg/errors"
+	"apiGo/pkg/header"
 	"apiGo/pkg/requests"
 
 	"context"
@@ -42,12 +43,7 @@ func (s *OnlineSubHandler) AddingARecord(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-
-	if _, err := w.Write([]byte("Успешное добавление записи")); err != nil {
-		errors.HandleError(w, fmt.Errorf("Ошибка в выводе данных: %v", err), http.StatusBadRequest)
-		return
-	}
+	header.HeaderWithText(w, []byte("Успешное добавление записи"))
 }
 
 func (s *OnlineSubHandler) ConclusionARecord(w http.ResponseWriter, r *http.Request) {
@@ -78,12 +74,7 @@ func (s *OnlineSubHandler) ConclusionARecord(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-
-	if _, err := w.Write(req); err != nil {
-		errors.HandleError(w, fmt.Errorf("Ошибка в выводе данных: %v", err), http.StatusBadRequest)
-		return
-	}
+	header.HeaderWithSub(w, req)
 }
 
 func (s *OnlineSubHandler) AllSubscriptions(w http.ResponseWriter, r *http.Request) {
@@ -107,12 +98,7 @@ func (s *OnlineSubHandler) AllSubscriptions(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-
-	if _, err := w.Write(req); err != nil {
-		errors.HandleError(w, fmt.Errorf("Ошибка в выводе данных: %v", err), http.StatusBadRequest)
-		return
-	}
+	header.HeaderWithSub(w, req)
 }
 
 func (s *OnlineSubHandler) UpdateSubscriptionRecord(w http.ResponseWriter, r *http.Request) {
@@ -136,11 +122,5 @@ func (s *OnlineSubHandler) UpdateSubscriptionRecord(w http.ResponseWriter, r *ht
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-
-	if _, err := w.Write([]byte("Успешная перезапись подписки")); err != nil {
-		errors.HandleError(w, fmt.Errorf("Ошибка в выводе данных: %v", err), http.StatusBadRequest)
-		return
-	}
+	header.HeaderWithText(w, []byte("Успешная перезапись подписки"))
 }
-
