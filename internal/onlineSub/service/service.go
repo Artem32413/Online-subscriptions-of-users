@@ -21,7 +21,7 @@ func (o *OnlineSubService) AddSubscriptionLogic(ctx context.Context, str structs
 	return o.repo.AddARecordSQL(ctx, str)
 }
 
-func (o *OnlineSubService) AmountOfSubscriptionsLogic(ctx context.Context, str structs.Subscription) (*int, error) {
+func (o *OnlineSubService) AmountOfSubscriptionsLogic(ctx context.Context, str structs.Subscription) (structs.Sum, error) {
 	return o.repo.ConclusionARecordSQL(ctx, str)
 }
 

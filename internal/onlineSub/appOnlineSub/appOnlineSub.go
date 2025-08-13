@@ -57,13 +57,13 @@ func (s *OnlineSubHandler) AddingARecord(w http.ResponseWriter, r *http.Request)
 }
 
 // ConclusionARecord apiGo
-// @Summary Получение информации о подписках
-// @Description Возвращает информацию о подписках пользователя
+// @Summary Получение информации о стоимости всех подписок за выбранный период с фильтрацией по id пользователя и названию подписки
+// @Description Возвращает стоимость всех подписок
 // @Tags Subscriptions
 // @Accept json
 // @Produce json
 // @Param subscription body structs.Subscription true "Данные для поиска подписок"
-// @Success 200 {array} structs.Subscription
+// @Success 200 {array} structs.Sum
 // @Failure 400 {string} string "Ошибка в зависимости от контекста"
 // @Router /sum/ [post]
 func (s *OnlineSubHandler) ConclusionARecord(w http.ResponseWriter, r *http.Request) {

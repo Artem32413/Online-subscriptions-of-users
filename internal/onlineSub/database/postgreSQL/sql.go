@@ -48,33 +48,33 @@ func (s *DBService) AddARecordSQL(ctx context.Context, str structs.Subscription)
 	return nil
 }
 
-func (s *DBService) ConclusionARecordSQL(ctx context.Context, str structs.Subscription) (*int, error) {
+func (s *DBService) ConclusionARecordSQL(ctx context.Context, str structs.Subscription) (structs.Sum, error) {
 	start_date, err := convert.ConvertTime(str.Start_date)
 	if err != nil {
-		return nil, err
+		return structs.Sum{}, err
 	}
 
 	end_date, err := convert.ConvertTime(str.End_date)
 	if err != nil {
-		return nil, err
+		return structs.Sum{}, err
 	}
 
 	r, err := s.db.Query(ctx, filtration, start_date, end_date, str.User_id, str.Service_name)
 	if err != nil {
-		return nil, fmt.Errorf("Ошибка в запросе с фильтрацией: %v", err)
+		return structs.Sum{}, fmt.Errorf("Ошибка в запросе с фильтрацией: %v", err)
 	}
 
 	defer r.Close()
 
-	var allAmounts *int
+	var allAmounts structs.Sum
 
 	if r.Next() {
 		var a structs.Subscription
 
 		if err = r.Scan(&a.Price); err != nil {
-			return nil, fmt.Errorf("Ошибка в сканировании: %v", err)
+			return structs.Sum{}, fmt.Errorf("Ошибка в сканировании: %v", err)
 		}
-		allAmounts = &a.Price
+		allAmounts.Sum = &a.Price
 	}
 
 	return allAmounts, nil

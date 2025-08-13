@@ -14,3 +14,7 @@ type Subscription2 struct {
 	User_id      string `json:"user_id" example:"60601fee-2bf1-4721-ae6f-7636e79a0cba"` // ID пользователя
 	Start_date   string `json:"start_date,omitempty" example:"07-2025"`                 // Дата начала подписки (месяц и год)
 }
+
+type Sum struct {
+	Sum *int // Стоимость всех подписок
+}
