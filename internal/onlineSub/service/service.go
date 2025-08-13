@@ -32,3 +32,7 @@ func (o *OnlineSubService) AllSubscriptionsLogic(ctx context.Context) ([]structs
 func (o *OnlineSubService) UpdateSubscriptionRecordLogic(ctx context.Context, a structs.Subscription) error {
 	return o.repo.UpdateSubscriptionRecordSQL(ctx, a)
 }
+
+func (o *OnlineSubService) DeleteSubscriptionRecordLogic(ctx context.Context, a structs.Subscription) error {
+	return o.repo.DeleteSubscriptionRecordSQL(ctx, a)
+}

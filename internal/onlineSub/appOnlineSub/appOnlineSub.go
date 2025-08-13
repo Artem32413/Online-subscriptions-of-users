@@ -124,3 +124,27 @@ func (s *OnlineSubHandler) UpdateSubscriptionRecord(w http.ResponseWriter, r *ht
 
 	header.HeaderWithText(w, []byte("Успешная перезапись подписки"))
 }
+
+func (s *OnlineSubHandler) DeleteSubscriptionRecord(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		errors.HandleError(w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second)
+	defer cancel()
+
+	var a structs.Subscription
+
+	if err := requests.NewDec(r, &a); err != nil {
+		errors.HandleError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if err := s.svc.DeleteSubscriptionRecordLogic(ctx, a); err != nil {
+		errors.HandleError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	header.HeaderWithText(w, []byte("Успешное удаление подписки"))
+}

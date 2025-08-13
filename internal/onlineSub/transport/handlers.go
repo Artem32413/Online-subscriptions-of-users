@@ -67,6 +67,7 @@ func AllHandles(ctx context.Context) *http.ServeMux {
 	mux.HandleFunc("/sum/", handlers.ConclusionARecord)
 	mux.HandleFunc("/all/", handlers.AllSubscriptions)
 	mux.HandleFunc("/update/", handlers.UpdateSubscriptionRecord)
+	mux.HandleFunc("/delete/", handlers.DeleteSubscriptionRecord)
 	mux.HandleFunc("/api/health/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
