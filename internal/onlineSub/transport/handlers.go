@@ -7,6 +7,7 @@ import (
 	"apiGo/internal/onlineSub/model/interfaces"
 	"apiGo/internal/onlineSub/service"
 	swaggerpkg "apiGo/internal/onlineSub/transport/swaggerPkg"
+	"apiGo/pkg/logger"
 
 	"context"
 	"log/slog"
@@ -26,8 +27,9 @@ func AllHandles(ctx context.Context) *http.ServeMux {
 	}
 
 	repo := postgreSQL.New(db)
+	log := logger.InitSwagLog()
 	svc := service.New(repo)
-	handlers := appOnlineSub.New(svc)
+	handlers := appOnlineSub.New(svc, log)
 
 	mux := http.NewServeMux()
 

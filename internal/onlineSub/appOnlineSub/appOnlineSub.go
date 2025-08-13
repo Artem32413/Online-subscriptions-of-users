@@ -6,6 +6,7 @@ import (
 	"apiGo/pkg/errors"
 	"apiGo/pkg/header"
 	"apiGo/pkg/requests"
+	"log/slog"
 
 	"context"
 	"fmt"
@@ -15,11 +16,13 @@ import (
 
 type OnlineSubHandler struct {
 	svc *service.OnlineSubService
+	l   *slog.Logger
 }
 
-func New(svc *service.OnlineSubService) *OnlineSubHandler {
+func New(svc *service.OnlineSubService, l *slog.Logger) *OnlineSubHandler {
 	return &OnlineSubHandler{
 		svc: svc,
+		l:   l,
 	}
 }
 
@@ -35,13 +38,13 @@ func New(svc *service.OnlineSubService) *OnlineSubHandler {
 // @Router /add/ [post]
 func (s *OnlineSubHandler) AddingARecord(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		errors.HandleError(w, fmt.Errorf("Неверный метод"), http.StatusBadRequest)
+		errors.HandleError(s.l, w, fmt.Errorf("Неверный метод"), http.StatusBadRequest)
 		return
 	}
 	var a structs.Subscription
 
 	if err := requests.NewDec(r, &a); err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -49,11 +52,11 @@ func (s *OnlineSubHandler) AddingARecord(w http.ResponseWriter, r *http.Request)
 	defer cancel()
 
 	if err := s.svc.AddSubscriptionLogic(ctx, a); err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
-	header.HeaderWithText(w, []byte("Успешное добавление записи"))
+	header.HeaderWithText(s.l, w, []byte("Успешное добавление записи"))
 }
 
 // ConclusionARecord apiGo
@@ -68,14 +71,14 @@ func (s *OnlineSubHandler) AddingARecord(w http.ResponseWriter, r *http.Request)
 // @Router /sum/ [post]
 func (s *OnlineSubHandler) ConclusionARecord(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		errors.HandleError(w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
+		errors.HandleError(s.l, w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
 		return
 	}
 
 	var a structs.Subscription
 
 	if err := requests.NewDec(r, &a); err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -84,17 +87,17 @@ func (s *OnlineSubHandler) ConclusionARecord(w http.ResponseWriter, r *http.Requ
 
 	res, err := s.svc.AmountOfSubscriptionsLogic(ctx, a)
 	if err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
 	req, err := requests.NewMarshall(w, &res)
 	if err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
-	header.HeaderWithSub(w, req)
+	header.HeaderWithSub(s.l, w, req)
 }
 
 // AllSubscriptions apiGo
@@ -107,7 +110,7 @@ func (s *OnlineSubHandler) ConclusionARecord(w http.ResponseWriter, r *http.Requ
 // @Router /all/ [get]
 func (s *OnlineSubHandler) AllSubscriptions(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		errors.HandleError(w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
+		errors.HandleError(s.l, w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
 		return
 	}
 
@@ -116,17 +119,17 @@ func (s *OnlineSubHandler) AllSubscriptions(w http.ResponseWriter, r *http.Reque
 
 	res, err := s.svc.AllSubscriptionsLogic(ctx)
 	if err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
 	req, err := requests.NewMarshall(w, &res)
 	if err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
-	header.HeaderWithSub(w, req)
+	header.HeaderWithSub(s.l, w, req)
 }
 
 // UpdateSubscriptionRecord apiGo
@@ -141,7 +144,7 @@ func (s *OnlineSubHandler) AllSubscriptions(w http.ResponseWriter, r *http.Reque
 // @Router /update/ [put]
 func (s *OnlineSubHandler) UpdateSubscriptionRecord(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
-		errors.HandleError(w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
+		errors.HandleError(s.l, w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
 		return
 	}
 
@@ -151,16 +154,16 @@ func (s *OnlineSubHandler) UpdateSubscriptionRecord(w http.ResponseWriter, r *ht
 	var a structs.Subscription
 
 	if err := requests.NewDec(r, &a); err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
 	if err := s.svc.UpdateSubscriptionRecordLogic(ctx, a); err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
-	header.HeaderWithText(w, []byte("Успешная перезапись подписки"))
+	header.HeaderWithText(s.l, w, []byte("Успешная перезапись подписки"))
 }
 
 // DeleteSubscriptionRecord apiGo
@@ -175,7 +178,7 @@ func (s *OnlineSubHandler) UpdateSubscriptionRecord(w http.ResponseWriter, r *ht
 // @Router /delete/ [delete]
 func (s *OnlineSubHandler) DeleteSubscriptionRecord(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
-		errors.HandleError(w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
+		errors.HandleError(s.l, w, fmt.Errorf("Не верный метод"), http.StatusBadRequest)
 		return
 	}
 
@@ -185,14 +188,14 @@ func (s *OnlineSubHandler) DeleteSubscriptionRecord(w http.ResponseWriter, r *ht
 	var a structs.Subscription
 
 	if err := requests.NewDec(r, &a); err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
 	if err := s.svc.DeleteSubscriptionRecordLogic(ctx, a); err != nil {
-		errors.HandleError(w, err, http.StatusBadRequest)
+		errors.HandleError(s.l, w, err, http.StatusBadRequest)
 		return
 	}
 
-	header.HeaderWithText(w, []byte("Успешное удаление подписки"))
+	header.HeaderWithText(s.l, w, []byte("Успешное удаление подписки"))
 }

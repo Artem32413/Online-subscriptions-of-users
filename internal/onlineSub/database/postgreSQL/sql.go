@@ -38,7 +38,7 @@ func New(db *databaseConfig.PostgreSQL) *DBService {
 func (s *DBService) AddARecordSQL(ctx context.Context, str structs.Subscription) error {
 	date, err := convert.ConvertTime(str.Start_date)
 	if err != nil {
-		return err
+		return fmt.Errorf("Ошибка в преобразовании строки в тип time.Time: %v", err)
 	}
 
 	if _, err := s.db.Exec(ctx, addition, str.Service_name, str.Price, str.User_id, date); err != nil {
@@ -51,12 +51,12 @@ func (s *DBService) AddARecordSQL(ctx context.Context, str structs.Subscription)
 func (s *DBService) ConclusionARecordSQL(ctx context.Context, str structs.Subscription) (structs.Sum, error) {
 	start_date, err := convert.ConvertTime(str.Start_date)
 	if err != nil {
-		return structs.Sum{}, err
+		return structs.Sum{}, fmt.Errorf("Ошибка в преобразовании строки в тип time.Time: %v", err)
 	}
 
 	end_date, err := convert.ConvertTime(str.End_date)
 	if err != nil {
-		return structs.Sum{}, err
+		return structs.Sum{}, fmt.Errorf("Ошибка в преобразовании строки в тип time.Time: %v", err)
 	}
 
 	r, err := s.db.Query(ctx, filtration, start_date, end_date, str.User_id, str.Service_name)
